@@ -1,0 +1,56 @@
+[gd_scene load_steps=6 format=3 uid="uid://ddpx70el7fyvs"]
+
+[ext_resource type="Script" path="res://fish.gd" id="1_3sfbv"]
+[ext_resource type="Texture2D" uid="uid://23c6oq5sydgu" path="res://textures/fish1Texture.png" id="1_rsawj"]
+[ext_resource type="Script" path="res://addons/donut_collision_polygon2D/donut_collision_polygon2D.gd" id="3_qt56j"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kw84c"]
+radius = 81.66
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0nfwu"]
+radius = 7.07107
+
+[node name="fish" type="CharacterBody2D"]
+collision_mask = 128
+script = ExtResource("1_3sfbv")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("1_rsawj")
+
+[node name="repulsion" type="Area2D" parent="."]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="repulsion"]
+shape = SubResource("CircleShape2D_kw84c")
+
+[node name="alignement" type="Area2D" parent="."]
+collision_layer = 0
+
+[node name="DonutCollisionPolygon2D" type="CollisionPolygon2D" parent="alignement"]
+polygon = PackedVector2Array(8.26637e-15, -135, 79.351, -109.217, 128.393, -41.7173, 128.393, 41.7173, 79.351, 109.217, 8.26637e-15, 135, -79.351, 109.217, -128.393, 41.7173, -128.393, -41.7173, -79.351, -109.217, -2.47991e-14, -135, -1.56142e-14, -85, -49.9617, -68.7664, -80.8398, -26.2664, -80.8398, 26.2664, -49.9617, 68.7664, 5.20475e-15, 85, 49.9617, 68.7664, 80.8398, 26.2664, 80.8398, -26.2664, 49.9617, -68.7664, 5.20475e-15, -85, 0.0001, -135)
+script = ExtResource("3_qt56j")
+radius = 110.0
+width = 50.0
+quality = 10
+
+[node name="attraction" type="Area2D" parent="."]
+collision_layer = 0
+
+[node name="DonutCollisionPolygon2D" type="CollisionPolygon2D" parent="attraction"]
+polygon = PackedVector2Array(1.1328e-14, -185, 108.74, -149.668, 175.945, -57.1681, 175.945, 57.1681, 108.74, 149.668, 1.1328e-14, 185, -108.74, 149.668, -175.945, 57.1681, -175.945, -57.1681, -108.74, -149.668, -3.39839e-14, -185, -2.47991e-14, -135, -79.351, -109.217, -128.393, -41.7173, -128.393, 41.7173, -79.351, 109.217, 8.26637e-15, 135, 79.351, 109.217, 128.393, 41.7173, 128.393, -41.7173, 79.351, -109.217, 8.26637e-15, -135, 0.0001, -185)
+script = ExtResource("3_qt56j")
+radius = 160.0
+width = 50.0
+quality = 10
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("CircleShape2D_0nfwu")
+
+[connection signal="body_entered" from="repulsion" to="." method="_on_repulsion_body_entered"]
+[connection signal="body_exited" from="repulsion" to="." method="_on_repulsion_body_exited"]
+[connection signal="body_entered" from="alignement" to="." method="_on_alignement_body_entered"]
+[connection signal="body_exited" from="alignement" to="." method="_on_alignement_body_exited"]
+[connection signal="body_entered" from="attraction" to="." method="_on_attraction_body_entered"]
+[connection signal="body_exited" from="attraction" to="." method="_on_attraction_body_exited"]

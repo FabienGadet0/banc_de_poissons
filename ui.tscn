@@ -1,0 +1,73 @@
+[gd_scene load_steps=2 format=3 uid="uid://c65lr2335q1vs"]
+
+[ext_resource type="Script" path="res://ui.gd" id="1_1kdjj"]
+
+[node name="ui" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1kdjj")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 1160.0
+offset_top = 4.0
+offset_right = 1276.0
+offset_bottom = 27.0
+theme_override_font_sizes/normal_font_size = 14
+bbcode_enabled = true
+text = "[center]Repulsion rate[/center]"
+fit_content = true
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 1160.0
+offset_top = 44.0
+offset_right = 1276.0
+offset_bottom = 67.0
+theme_override_font_sizes/normal_font_size = 14
+bbcode_enabled = true
+text = "[center]Alignement rate[/center]"
+fit_content = true
+
+[node name="RichTextLabel3" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 1160.0
+offset_top = 79.0
+offset_right = 1276.0
+offset_bottom = 102.0
+theme_override_font_sizes/normal_font_size = 14
+bbcode_enabled = true
+text = "[center]Attraction rate[/center]"
+fit_content = true
+
+[node name="repulsion_slider" type="HSlider" parent="."]
+layout_mode = 2
+offset_left = 1163.0
+offset_top = 24.0
+offset_right = 1273.0
+offset_bottom = 40.0
+rounded = true
+
+[node name="alignement_slider" type="HSlider" parent="."]
+layout_mode = 2
+offset_left = 1163.0
+offset_top = 62.0
+offset_right = 1273.0
+offset_bottom = 78.0
+rounded = true
+
+[node name="attraction_slider" type="HSlider" parent="."]
+layout_mode = 2
+offset_left = 1163.0
+offset_top = 99.0
+offset_right = 1273.0
+offset_bottom = 115.0
+rounded = true
+
+[connection signal="drag_ended" from="repulsion_slider" to="." method="_on_repulsion_slider_drag_ended"]
+[connection signal="drag_ended" from="alignement_slider" to="." method="_on_alignement_slider_drag_ended"]
+[connection signal="drag_ended" from="attraction_slider" to="." method="_on_attraction_slider_drag_ended"]

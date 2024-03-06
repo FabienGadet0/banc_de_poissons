@@ -1,0 +1,120 @@
+[gd_scene load_steps=4 format=3 uid="uid://c0yud7o1acwch"]
+
+[ext_resource type="Script" path="res://ui.gd" id="1_51sig"]
+[ext_resource type="Script" path="res://main_scene.gd" id="1_vllln"]
+[ext_resource type="PackedScene" uid="uid://b2rvrc7my623m" path="res://fish_spawner.tscn" id="2_7av3e"]
+
+[node name="world" type="Node"]
+script = ExtResource("1_vllln")
+
+[node name="fish_spawner" parent="." instance=ExtResource("2_7av3e")]
+position = Vector2(643, 435)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(642, 434)
+
+[node name="ui" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_51sig")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="ui"]
+layout_mode = 0
+offset_left = 1127.0
+offset_top = 5.0
+offset_right = 1243.0
+offset_bottom = 28.0
+theme_override_font_sizes/normal_font_size = 14
+bbcode_enabled = true
+text = "[center]Repulsion rate[/center]"
+fit_content = true
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="ui"]
+layout_mode = 0
+offset_left = 1127.0
+offset_top = 45.0
+offset_right = 1243.0
+offset_bottom = 68.0
+theme_override_font_sizes/normal_font_size = 14
+bbcode_enabled = true
+text = "[center]Alignement rate[/center]"
+fit_content = true
+
+[node name="RichTextLabel3" type="RichTextLabel" parent="ui"]
+layout_mode = 0
+offset_left = 1127.0
+offset_top = 80.0
+offset_right = 1243.0
+offset_bottom = 103.0
+theme_override_font_sizes/normal_font_size = 14
+bbcode_enabled = true
+text = "[center]Attraction rate[/center]"
+fit_content = true
+
+[node name="repulsion_slider" type="HSlider" parent="ui"]
+layout_mode = 2
+offset_left = 1130.0
+offset_top = 25.0
+offset_right = 1280.0
+offset_bottom = 41.0
+grow_horizontal = 0
+grow_vertical = 2
+max_value = 400.0
+step = 5.0
+rounded = true
+
+[node name="alignement_slider" type="HSlider" parent="ui"]
+layout_mode = 2
+offset_left = 1130.0
+offset_top = 63.0
+offset_right = 1280.0
+offset_bottom = 79.0
+grow_horizontal = 0
+grow_vertical = 2
+max_value = 400.0
+step = 5.0
+rounded = true
+
+[node name="attraction_slider" type="HSlider" parent="ui"]
+layout_mode = 2
+offset_left = 1130.0
+offset_top = 100.0
+offset_right = 1280.0
+offset_bottom = 116.0
+grow_horizontal = 0
+grow_vertical = 2
+max_value = 400.0
+step = 5.0
+rounded = true
+
+[node name="RichTextLabel4" type="RichTextLabel" parent="ui"]
+layout_mode = 0
+offset_left = 1127.0
+offset_top = 116.0
+offset_right = 1243.0
+offset_bottom = 139.0
+theme_override_font_sizes/normal_font_size = 14
+bbcode_enabled = true
+text = "[center]Speed rate[/center]"
+fit_content = true
+
+[node name="speed_slider" type="HSlider" parent="ui"]
+layout_mode = 2
+offset_left = 1130.0
+offset_top = 136.0
+offset_right = 1280.0
+offset_bottom = 152.0
+grow_horizontal = 0
+grow_vertical = 2
+max_value = 400.0
+step = 5.0
+rounded = true
+
+[connection signal="drag_ended" from="ui/repulsion_slider" to="." method="_on_repulsion_slider_drag_ended"]
+[connection signal="drag_ended" from="ui/alignement_slider" to="." method="_on_alignement_slider_drag_ended"]
+[connection signal="drag_ended" from="ui/attraction_slider" to="." method="_on_attraction_slider_drag_ended"]
+[connection signal="drag_ended" from="ui/speed_slider" to="." method="_on_speed_slider_drag_ended"]
