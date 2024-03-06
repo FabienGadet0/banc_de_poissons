@@ -12,9 +12,9 @@ radius = 7.07107
 
 [node name="fish" type="CharacterBody2D"]
 collision_mask = 128
-motion_mode = 1
 script = ExtResource("1_3sfbv")
-attraction = true
+SPEED = null
+is_player = null
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.6, 0.6)

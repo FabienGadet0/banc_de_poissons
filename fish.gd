@@ -2,6 +2,9 @@ extends CharacterBody2D
 
 @export var SPEED : float = 100
 @export var is_player : bool = false
+@export var attraction : bool = false
+@export var repulsion : bool = false
+@export var alignement : bool = false
 
 
 @onready var repulsion_area = $repulsion
@@ -19,38 +22,35 @@ var distance_threshold = 5        # How close to consider reached
 var repulsion_fishes = {}
 var alignement_fishes = {}
 var attraction_fishes = {}
+#var movement : Movement
+var target : Node2D
 
-var movements = []
-
-class Movement:
-	var target : Vector2
-	var target_velocity : Vector2
+#class Movement:
+	#var target : Vector2
+	#var target_velocity : Vector2
 
 func _ready():
 	if is_player:
 		SPEED *= 3
-	
-	
-	generate_next_point(50)
-	var m =  movements.pop_front()
-	velocity = m.target_velocity
-	sprite.look_at(m.target)
-	target_point = m.target
+	self.velocity = generate_next_point(50)
+	#var m =  movements[0]
+	sprite.look_at(self.target.global_position)
+
 		
 	var sprite_n = randi_range(1,4)
 	sprite.set_texture(load("res://textures/fish"+str(sprite_n)+"Texture.png"))
 
 func _process(delta):
-	if is_player:
-		print("repulsion : " + str(repulsion_fishes.size()))
-		print("alignement : " + str(alignement_fishes.size()))
-		print("attraction : " + str(attraction_fishes.size()))
+	pass
+	#if is_player:
+		#print("repulsion : " + str(repulsion_fishes.size()))
+		#print("alignement : " + str(alignement_fishes.size()))
+		#print("attraction : " + str(attraction_fishes.size()))
 
 func generate_next_point(radius):
-	if is_player:
-		return get_global_mouse_position()
-	var new_m = get_random_surrounding_point(self.global_position,50)
-	movements.push_back(new_m)
+	#if is_player:
+		#return get_global_mouse_position()
+	return get_random_surrounding_point(self.global_position,50)
 	#calculate_velocity_and_store_movement(get_random_point_around(radius))
 	
 
@@ -78,8 +78,8 @@ func repulsion_logic():
 		var randomI = randi() % self.repulsion_fishes.size()
 		var fish = \
 		self.repulsion_fishes[self.repulsion_fishes.keys()[randomI]]
-		var n_movement = opposite_to_target(global_position,fish)
-		movements.push_back(n_movement)
+		self.movement = opposite_to_target(global_position,fish.global_position)
+		#movements.push_back(n_movement)
 		#var d = self.global_position.direction_to(fish)
 		##print(fish)
 		##print(d)
@@ -93,57 +93,68 @@ func alignement_logic():
 		var randomI = randi() % self.alignement_fishes.size()
 		var fish = \
 		self.alignement_fishes[self.alignement_fishes.keys()[randomI]]
-		var n_movement = align_parallel_to_target(global_position,fish)
-		movements.push_back(n_movement)
+		self.movement = align_parallel_to_target(global_position,fish.global_position)
+		#movements.push_back(n_movement)
 		
 func attraction_logic():
-	if attraction_fishes.size() > 0:
+	if self.target == null and attraction_fishes.size() > 0:
 		var randomI = randi() % self.attraction_fishes.size()
 		var fish = \
 		self.attraction_fishes[self.attraction_fishes.keys()[randomI]]
-		var n_movement = move_toward_target(global_position,fish)
-		movements.push_back(n_movement)
+		self.target = fish
+	#return move_toward_target(global_position,self.target.global_position)
+		#movements.push_back(n_movement)
 
-func calculate_velocity_and_store_movement(target_position):
-	if target_position == null:
-		print("target is null")
-	var current_position = get_global_position()
-	var direction = target_position - current_position
-	var v = direction.normalized()
-	if v == null:
-		print("v is null")
-	else:
-		var m = Movement.new()
-		m.target = target_position
-		m.target_velocity = v * SPEED
-		movements.push_back(m)
+#func calculate_velocity_and_store_movement(target_position):
+	#if target_position == null:
+		#print("target is null")
+	#var current_position = get_global_position()
+	#var direction = target_position - current_position
+	#var v = direction.normalized()
+	#if v == null:
+		#print("v is null")
+	#else:
+		#var m = Movement.new()
+		#m.target = target_position
+		#m.target_velocity = v * SPEED
+		#self.movement = m
 
 	
 func _physics_process(delta):
-	has_reached_target = (target_point - global_position).length() <= distance_threshold
+	has_reached_target = (self.target.global_position - global_position).length() <= distance_threshold
 	if has_reached_target:
+		self.target = null
 		var i = randi() % 3
 		#match i:
 			#0: repulsion_logic()
 			#_: attraction_logic()
 		#repulsion_logic()
 		#alignement_logic()
-		attraction_logic()
+	#if attraction:
+	attraction_logic()
+	if self.target != null:
+		velocity = move_toward_target(self.global_position,self.target.global_position)
+		sprite.look_at(self.target.global_position)
+	else:
+		print("no attraction")
+		velocity = generate_next_point(50)
+		sprite.look_at(self.target.global_position)
+	#if repulsion:
+		#repulsion_logic()
+		#alignement_logic()
 		
-		if movements.is_empty():
-			print("no movement")
-			generate_next_point(200)
-		var m = movements.pop_front()
-		if m != null:
-			sprite.look_at(m.target)
-			target_point = m.target
-			velocity = m.target_velocity
-			print(global_position)
-			print("=")
-			print(m.target)
-			print("=")
-			print(velocity)
-			print("===============")
+		#if movements.is_empty():
+			#print("no movement")
+			#generate_next_point(200)
+		#velocity = self.movement.target_velocity
+#
+	#if is_player:
+		#print(global_position)
+		#print("=")
+		#print(self.target)
+		#print("=")
+		#print(velocity)
+		#print("===============")
 	#print("*********************")
 	#print(repulsion_fishes.size())
 	#print(alignement_fishes.size())
@@ -160,9 +171,32 @@ func _physics_process(delta):
 
 
 #TODO get the fish reference and reposition all the time otherwise fish will follow old path 
+#func _on_repulsion_body_entered(body):
+	#if body.name != self.name:
+		#repulsion_fishes[body.name] = body.global_position
+#
+#func _on_repulsion_body_exited(body):
+	#if body.name != self.name:
+		#repulsion_fishes.erase(body.name)
+#
+#func _on_alignement_body_entered(body):
+	#if body.name != self.name:
+		#alignement_fishes[body.name] = body.global_position
+#
+#func _on_alignement_body_exited(body):
+	#if body.name != self.name:
+		#alignement_fishes.erase(body.name)
+#
+#func _on_attraction_body_entered(body):
+	#if body.name != self.name:
+		#attraction_fishes[body.name] = body.global_position
+#
+#func _on_attraction_body_exited(body):
+	#if body.name != self.name:
+		#attraction_fishes.erase(body.name)
 func _on_repulsion_body_entered(body):
 	if body.name != self.name:
-		repulsion_fishes[body.name] = body.global_position
+		repulsion_fishes[body.name] = body
 
 func _on_repulsion_body_exited(body):
 	if body.name != self.name:
@@ -170,7 +204,7 @@ func _on_repulsion_body_exited(body):
 
 func _on_alignement_body_entered(body):
 	if body.name != self.name:
-		alignement_fishes[body.name] = body.global_position
+		alignement_fishes[body.name] = body
 
 func _on_alignement_body_exited(body):
 	if body.name != self.name:
@@ -178,14 +212,14 @@ func _on_alignement_body_exited(body):
 
 func _on_attraction_body_entered(body):
 	if body.name != self.name:
-		attraction_fishes[body.name] = body.global_position
+		attraction_fishes[body.name] = body
 
 func _on_attraction_body_exited(body):
 	if body.name != self.name:
 		attraction_fishes.erase(body.name)
 
 
-func opposite_to_target(position: Vector2, target: Vector2, range: float = 50) -> Movement:
+func opposite_to_target(position: Vector2, target: Vector2, range: float = 50) -> Vector2:
 	"""
 	Generates a new Movement struct with target and velocity to move away from the target.
 
@@ -197,20 +231,18 @@ func opposite_to_target(position: Vector2, target: Vector2, range: float = 50) -
 		A new Movement struct with target and velocity to move away (Movement).
 	"""
 
-	var movement = Movement.new()
 	if position.x > target.x:
-		movement.target.x = target.x + range
+		self.target.x = target.x + range
 	else:
-		movement.target.x = target.x - range
+		self.target.x = target.x - range
 	if position.y > target.y:
-		movement.target.y = target.y + range
+		self.target.y = target.y + range
 	else:
-		movement.target.y = target.y - range
+		self.target.y = target.y - range
 
-	movement.target_velocity = (movement.target - position).normalized() * SPEED  # Normalize and scale by speed
-	return movement
+	return (target - position).normalized() * SPEED
 
-func align_parallel_to_target(position: Vector2, target: Vector2) -> Movement:
+func align_parallel_to_target(position: Vector2, target: Vector2) -> Vector2:
 	"""
 	Generates a new Movement struct with target and velocity to move parallel to the target.
 
@@ -224,16 +256,12 @@ func align_parallel_to_target(position: Vector2, target: Vector2) -> Movement:
 		A new Movement struct with target and velocity to move parallel (Movement).
 	"""
 
-	var movement = Movement.new()
 	var direction = (target - position).normalized()  # Get the direction vector
 	var perpendicular = Vector2(direction.y, -direction.x)  # Arbitrary perpendicular direction
 
-	movement.target = target
-	movement.target_velocity = perpendicular.project(direction * SPEED)  # Project desired speed onto perpendicular plane
+	return perpendicular.project(direction * SPEED)  # Project desired speed onto perpendicular plane
 
-	return movement
-
-func move_toward_target(position: Vector2, target: Vector2) -> Movement:
+func move_toward_target(position: Vector2, target: Vector2) -> Vector2:
 	"""
 	Generates a new Movement struct with target and velocity to move towards the target.
 
@@ -245,12 +273,9 @@ func move_toward_target(position: Vector2, target: Vector2) -> Movement:
 		A new Movement struct with target and velocity to move towards (Movement).
 	"""
 
-	var movement = Movement.new()
-	movement.target = target
-	movement.target_velocity = (target - position).normalized() * SPEED  # Scale direction vector by speed
-	return movement
+	return (target - position).normalized() * SPEED  # Scale direction vector by speed
 
-func get_random_surrounding_point(position: Vector2, threshold: float) -> Movement:
+func get_random_surrounding_point(position: Vector2, threshold: float) -> Vector2:
 	"""
 	Generates a random point within a threshold distance surrounding the given position.
 
@@ -263,7 +288,7 @@ func get_random_surrounding_point(position: Vector2, threshold: float) -> Moveme
 	"""
 
 	var random_point = Vector2(randf_range(-threshold + global_position.x,threshold+ global_position.x),randf_range(-threshold + global_position.y,threshold+ global_position.y))  # Get a random direction vector
-	var movement = Movement.new()
-	movement.target = random_point 
-	movement.target_velocity = (movement.target - position).normalized() * SPEED  # Normalize and scale by speed
-	return movement
+	#movement.target = random_point
+	self.target = Node2D.new()
+	self.target.global_position = random_point	
+	return (random_point - position).normalized() * SPEED  # Normalize and scale by speed

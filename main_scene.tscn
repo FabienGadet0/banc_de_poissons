@@ -9,7 +9,6 @@ script = ExtResource("1_vllln")
 
 [node name="fish_spawner" parent="." instance=ExtResource("2_7av3e")]
 position = Vector2(643, 435)
-fish_amount = 15
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(642, 434)
