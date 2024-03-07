@@ -9,3 +9,9 @@ Those behaviors trigger depending on the range between the fish and others.
 - Attraction: Move towards nearby fish, creating a schooling effect.
 
 ![](./fishy_fishy.gif)
+
+
+
+
+Made with Godot4
+Assets are from a free asset pack here : https://agdawkwardgamedev.itch.io/free-fish-assets
