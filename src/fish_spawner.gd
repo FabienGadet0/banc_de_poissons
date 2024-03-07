@@ -2,7 +2,7 @@ extends Node2D
 
 @export var fish_amount : int = 10
 
-@onready var fish_object = preload("res://fish.tscn")
+@onready var fish_object = preload("res://src/fish.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

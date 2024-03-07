@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=3 uid="uid://c0yud7o1acwch"]
 
-[ext_resource type="Script" path="res://ui.gd" id="1_51sig"]
-[ext_resource type="Script" path="res://main_scene.gd" id="1_vllln"]
-[ext_resource type="PackedScene" uid="uid://b2rvrc7my623m" path="res://fish_spawner.tscn" id="2_7av3e"]
+[ext_resource type="Script" path="res://src/ui.gd" id="1_51sig"]
+[ext_resource type="Script" path="res://src/main_scene.gd" id="1_vllln"]
+[ext_resource type="PackedScene" uid="uid://b2rvrc7my623m" path="res://src/fish_spawner.tscn" id="2_7av3e"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k5fgh"]
 size = Vector2(20, 1078.5)

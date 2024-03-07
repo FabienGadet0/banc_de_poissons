@@ -9,7 +9,7 @@ enum ACTION{NONE,REPULSE,ALIGNEMENT,ATTRACTION}
 @export var repulsion : bool = false
 @export var alignement : bool = false
 
-@onready var target_object = preload("res://target.tscn")
+@onready var target_object = preload("res://src/target.tscn")
 @onready var repulsion_area = $repulsion
 @onready var alignement_area = $alignement
 @onready var attraction_area = $attraction
