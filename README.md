@@ -1,6 +1,7 @@
 # Fish Simulation
 
-This is an attempt to represent a school of fish , following their real life behavior (from what we know about) :
+This is an attempt to represent a school of fish , following their real life behavior (from what we know about) :  
+https://en.wikipedia.org/wiki/Shoaling_and_schooling  
 
 Those behaviors trigger depending on the range between the fish and others.
 
@@ -11,6 +12,9 @@ Those behaviors trigger depending on the range between the fish and others.
 ![](./fishy_fishy.gif)
 
 
+
+The different layers :  
+![](./fish_collision_shapes.png)
 
 
 Made with Godot4
