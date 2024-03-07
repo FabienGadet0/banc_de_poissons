@@ -20,16 +20,16 @@ size = Vector2(1931, 20)
 script = ExtResource("1_vllln")
 
 [node name="fish_spawner" parent="." instance=ExtResource("2_7av3e")]
-position = Vector2(616, 404)
-fish_amount = 50
+position = Vector2(685, 443)
+fish_amount = 25
 
 [node name="fish_spawner3" parent="." instance=ExtResource("2_7av3e")]
-position = Vector2(1000, 700)
-fish_amount = 50
+position = Vector2(1200, 443)
+fish_amount = 25
 
 [node name="fish_spawner2" parent="." instance=ExtResource("2_7av3e")]
-position = Vector2(1500, 404)
-fish_amount = 50
+position = Vector2(850, 800)
+fish_amount = 25
 
 [node name="ui" type="Control" parent="."]
 layout_mode = 3

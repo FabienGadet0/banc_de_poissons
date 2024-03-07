@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://ccepqiv21h3u5"]
+[gd_scene load_steps=3 format=3 uid="uid://dh1p3hblyxh3f"]
 
 [ext_resource type="Texture2D" uid="uid://pq0ruqvlpsw" path="res://icon.svg" id="1_vbb4w"]
 [ext_resource type="Script" path="res://target.gd" id="1_ya1jo"]
@@ -7,11 +7,12 @@
 script = ExtResource("1_ya1jo")
 
 [node name="destroy_timer" type="Timer" parent="."]
-wait_time = 15.0
+wait_time = 30.0
 one_shot = true
 autostart = true
 
 [node name="Icon" type="Sprite2D" parent="."]
+visible = false
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("1_vbb4w")
 

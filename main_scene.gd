@@ -7,18 +7,6 @@ extends Node
 
 @onready var fishes = $fish_spawner
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	#print(get_global_mouse_position())
-	#print(fish1.repulsion_area.get_overlapping_bodies())
-	pass
-
-
-
 func _on_repulsion_slider_drag_ended(value_changed):
 	if value_changed:
 		repulsion_rate = $ui/repulsion_slider.value

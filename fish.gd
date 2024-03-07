@@ -27,7 +27,7 @@ var alignement_fishes = {}
 var attraction_fishes = {}
 #var movement : Movement
 var target : Node2D
-var action : ACTION
+var action
 var can_act : bool = false
 	
 #class Movement:
@@ -37,6 +37,8 @@ var can_act : bool = false
 func _ready():
 	if is_player:
 		SPEED *= 3
+	get_random_surrounding_point(self.global_position,30)
+		
 	#self.velocity = generate_next_point(50)
 	#var m =  movements[0]
 	#sprite.look_at(self.target.global_position)
@@ -48,6 +50,13 @@ func _ready():
 func set_speed(speed):
 	self.SPEED = speed
 	
+	
+func average(arr) -> Vector2:
+	var sum = Vector2.ZERO
+	for i in arr.values():
+		sum += i.global_position
+	return sum/arr.size()
+	
 func repulsion_logic(repulsion_range :float, forced : bool = false):
 	if !repulsion_fishes.is_empty():
 		var randomI = randi() % self.repulsion_fishes.size()
@@ -57,7 +66,7 @@ func repulsion_logic(repulsion_range :float, forced : bool = false):
 		get_parent().get_parent().add_child(n)
 		n.global_position = within_walls(to_global((fish.position * repulsion_range)*-1),30)
 		self.target = n
-		self.action = ACTION.REPULSE
+		self.action = "repulsion"
 
 func alignement_logic():
 	if alignement_fishes.size() > 0:
@@ -68,42 +77,41 @@ func alignement_logic():
 		n.global_position = within_walls(to_global(fish.position * randf_range(0.4,0.7)),30)
 		#print(n.global_position)
 		self.target = n
-		self.action = ACTION.ALIGNEMENT
+		self.action = "alignement"
 
 		
 func attraction_logic():
 	if attraction_fishes.size() > 0:
-		var randomI = randi() % self.attraction_fishes.size()
-		var fish = \
-		self.attraction_fishes[self.attraction_fishes.keys()[randomI]]
-		self.target = fish
-		self.action = ACTION.ATTRACTION
-	
+		#var randomI = randi() % self.attraction_fishes.size()
+		#var fish = \
+		#self.attraction_fishes[self.attraction_fishes.keys()[randomI]]
+		var n = target_object.instantiate()
+		get_parent().get_parent().add_child(n)
+		n.set_global_position(within_walls(average(self.attraction_fishes),30))
+		self.target = n
+		self.action = "attraction"
+
 func _physics_process(delta):
 	if self.target:
 		has_reached_target = (self.target.global_position - global_position).length() <= distance_threshold
 		if has_reached_target:
 			self.target = null
-			self.action = ACTION.NONE
+			self.action = "None"
 			var i = randi() % 3
 			match i:
 				0: attraction_logic()
 				1: repulsion_logic(2)
 				2: alignement_logic()
-				
+	$action.set_text(self.action)
+	#print(get_global_mouse_position())
 	if self.target != null:
 		velocity = move_toward_target(self.global_position,self.target.global_position)
 		sprite.look_at(self.target.global_position)
-	if self.target == null:
-		#print("no target")
-		get_random_surrounding_point(self.global_position,100)
-		self.action = ACTION.ATTRACTION
+	else:
+		print("no target after logic")
+		get_random_surrounding_point(self.global_position,30)
 	move_and_slide()
 
-#func _draw():
-	#if self.target:
-		#draw_line(Vector2(0,0), self.target.position,Color.AQUA,1)
-	
 func _on_repulsion_body_entered(body):
 	if body.name != self.name:
 		repulsion_fishes[body.name] = body
@@ -128,50 +136,25 @@ func _on_attraction_body_exited(body):
 	if body.name != self.name:
 		attraction_fishes.erase(body.name)
 
-#
-#func opposite_to_target(position: Vector2, target: Vector2, range: float = 50) -> Vector2:
-	##print((target - position).normalized() * SPEED)
-	#return (position- target ).normalized() * SPEED
-
-func align_parallel_to_target(position: Vector2, target: Vector2) -> Vector2:
-
-	var direction = (target - position).normalized()  # Get the direction vector
-	var perpendicular = Vector2(direction.y, -direction.x)  # Arbitrary perpendicular direction
-
-	return perpendicular.project(direction * SPEED)  # Project desired speed onto perpendicular plane
-
 func move_toward_target(position: Vector2, target: Vector2) -> Vector2:
 	return (target - position).normalized() * SPEED  # Scale direction vector by speed
 
+# clamp the target to stay within walls
 func within_walls(point: Vector2, threshold: float):
-	var n = point.clamp(Vector2(threshold,threshold),(get_viewport_rect().size* 0.9))
-	print("==")
-	print(point)
-	print("==")
-	return point.clamp(Vector2(threshold,threshold),(get_viewport_rect().size* 0.9))
+	var viewport_coord = Vector2(1920,1080)
+	viewport_coord.x -= threshold
+	viewport_coord.y -= threshold
+	var n = point.clamp(Vector2(threshold,threshold),viewport_coord)
+	return n
 
 func get_random_surrounding_point(position: Vector2, threshold: float):
-	"""
-	Generates a random point within a threshold distance surrounding the given position.
-
-	Args:
-		position: The central position (Vector2).
-		threshold: The maximum distance for the random point (float).
-1920*1080
-0+threshold > point.x true = min(threshold, point)
-min()
-1980-threshold < point.x
-
-	Returns:
-		A new Vector2 representing the randomly generated point (Vector2).
-	"""
-
-	var random_point = Vector2(randf_range(-threshold + global_position.x,threshold+ global_position.x),randf_range(-threshold + global_position.y,threshold+ global_position.y))  # Get a random direction vector
+	var random_point = Vector2(randf_range(-threshold + position.x,threshold+ position.x), \
+	randf_range(-threshold + position.y,threshold+ position.y))  # Get a random direction vector
+	#random_point = Vector2(500,500)
 	#movement.target = random_point
-	self.target = Node2D.new()
-	self.target.global_position = within_walls(random_point,50)	
-	#return (random_point - position).normalized() * SPEED  # Normalize and scale by speed
+	var n = target_object.instantiate()
+	get_parent().get_parent().add_child(n)
+	n.global_position = within_walls(random_point,30)
 
-
-func _on_initialisation_timeout():
-	self.can_act = true
+	self.target = n
+	self.action = "random"
