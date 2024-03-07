@@ -5,34 +5,36 @@
 [ext_resource type="Script" path="res://addons/donut_collision_polygon2D/donut_collision_polygon2D.gd" id="3_qt56j"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kw84c"]
-radius = 81.66
+radius = 40.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_0nfwu"]
 radius = 7.07107
 
 [node name="fish" type="CharacterBody2D"]
-collision_mask = 128
+collision_mask = 254
 motion_mode = 1
 script = ExtResource("1_3sfbv")
 attraction = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.6, 0.6)
+scale = Vector2(0.4, 0.4)
 texture = ExtResource("1_rsawj")
 
 [node name="repulsion" type="Area2D" parent="."]
 collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="repulsion"]
+visible = false
 shape = SubResource("CircleShape2D_kw84c")
 
 [node name="alignement" type="Area2D" parent="."]
 collision_layer = 0
 
 [node name="DonutCollisionPolygon2D" type="CollisionPolygon2D" parent="alignement"]
-polygon = PackedVector2Array(8.26609e-15, -135, 79.351, -109.217, 128.393, -41.7173, 128.393, 41.7173, 79.351, 109.217, 8.26609e-15, 135, -79.351, 109.217, -128.393, 41.7173, -128.393, -41.7173, -79.351, -109.217, -2.47983e-14, -135, -1.56137e-14, -85, -49.9617, -68.7664, -80.8398, -26.2664, -80.8398, 26.2664, -49.9617, 68.7664, 5.20458e-15, 85, 49.9617, 68.7664, 80.8398, 26.2664, 80.8398, -26.2664, 49.9617, -68.7664, 5.20458e-15, -85, 0.0001, -135)
+visible = false
+polygon = PackedVector2Array(5.51091e-15, -90, 52.9007, -72.8115, 85.5951, -27.8115, 85.5951, 27.8115, 52.9007, 72.8115, 5.51091e-15, 90, -52.9007, 72.8115, -85.5951, 27.8115, -85.5951, -27.8115, -52.9007, -72.8115, -1.65327e-14, -90, -7.34788e-15, -40, -23.5114, -32.3607, -38.0423, -12.3607, -38.0423, 12.3607, -23.5114, 32.3607, 2.44929e-15, 40, 23.5114, 32.3607, 38.0423, 12.3607, 38.0423, -12.3607, 23.5114, -32.3607, 2.44929e-15, -40, 0.0001, -89.9999)
 script = ExtResource("3_qt56j")
-radius = 110.0
+radius = 65.0
 width = 50.0
 quality = 10
 
@@ -40,15 +42,20 @@ quality = 10
 collision_layer = 0
 
 [node name="DonutCollisionPolygon2D" type="CollisionPolygon2D" parent="attraction"]
-polygon = PackedVector2Array(1.13276e-14, -185, 108.74, -149.668, 175.945, -57.1681, 175.945, 57.1681, 108.74, 149.668, 1.13276e-14, 185, -108.74, 149.668, -175.945, 57.1681, -175.945, -57.1681, -108.74, -149.668, -3.39828e-14, -185, -2.47983e-14, -135, -79.351, -109.217, -128.393, -41.7173, -128.393, 41.7173, -79.351, 109.217, 8.26609e-15, 135, 79.351, 109.217, 128.393, 41.7173, 128.393, -41.7173, 79.351, -109.217, 8.26609e-15, -135, 0.0001, -185)
+visible = false
+polygon = PackedVector2Array(8.57253e-15, -140, 82.2899, -113.262, 133.148, -43.2624, 133.148, 43.2624, 82.2899, 113.262, 8.57253e-15, 140, -82.2899, 113.262, -133.148, 43.2624, -133.148, -43.2624, -82.2899, -113.262, -2.57176e-14, -140, -1.65327e-14, -90, -52.9007, -72.8115, -85.5951, -27.8115, -85.5951, 27.8115, -52.9007, 72.8115, 5.51091e-15, 90, 52.9007, 72.8115, 85.5951, 27.8115, 85.5951, -27.8115, 52.9007, -72.8115, 5.51091e-15, -90, 0.0001, -140)
 script = ExtResource("3_qt56j")
-radius = 160.0
+radius = 115.0
 width = 50.0
 quality = 10
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 shape = SubResource("CircleShape2D_0nfwu")
+
+[node name="initialisation" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+autostart = true
 
 [connection signal="body_entered" from="repulsion" to="." method="_on_repulsion_body_entered"]
 [connection signal="body_exited" from="repulsion" to="." method="_on_repulsion_body_exited"]
@@ -56,3 +63,4 @@ shape = SubResource("CircleShape2D_0nfwu")
 [connection signal="body_exited" from="alignement" to="." method="_on_alignement_body_exited"]
 [connection signal="body_entered" from="attraction" to="." method="_on_attraction_body_entered"]
 [connection signal="body_exited" from="attraction" to="." method="_on_attraction_body_exited"]
+[connection signal="timeout" from="initialisation" to="." method="_on_initialisation_timeout"]

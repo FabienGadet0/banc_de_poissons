@@ -1,17 +1,35 @@
-[gd_scene load_steps=4 format=3 uid="uid://c0yud7o1acwch"]
+[gd_scene load_steps=8 format=3 uid="uid://c0yud7o1acwch"]
 
 [ext_resource type="Script" path="res://ui.gd" id="1_51sig"]
 [ext_resource type="Script" path="res://main_scene.gd" id="1_vllln"]
 [ext_resource type="PackedScene" uid="uid://b2rvrc7my623m" path="res://fish_spawner.tscn" id="2_7av3e"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k5fgh"]
+size = Vector2(20, 1078.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lm3i0"]
+size = Vector2(27, 1096.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_irh34"]
+size = Vector2(1931, 27)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wvjre"]
+size = Vector2(1931, 20)
+
 [node name="world" type="Node"]
 script = ExtResource("1_vllln")
 
 [node name="fish_spawner" parent="." instance=ExtResource("2_7av3e")]
-position = Vector2(643, 435)
+position = Vector2(616, 404)
+fish_amount = 50
 
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(642, 434)
+[node name="fish_spawner3" parent="." instance=ExtResource("2_7av3e")]
+position = Vector2(1000, 700)
+fish_amount = 50
+
+[node name="fish_spawner2" parent="." instance=ExtResource("2_7av3e")]
+position = Vector2(1500, 404)
+fish_amount = 50
 
 [node name="ui" type="Control" parent="."]
 layout_mode = 3
@@ -24,9 +42,9 @@ script = ExtResource("1_51sig")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="ui"]
 layout_mode = 0
-offset_left = 1127.0
+offset_left = 1751.0
 offset_top = 5.0
-offset_right = 1243.0
+offset_right = 1867.0
 offset_bottom = 28.0
 theme_override_font_sizes/normal_font_size = 14
 bbcode_enabled = true
@@ -35,9 +53,9 @@ fit_content = true
 
 [node name="RichTextLabel2" type="RichTextLabel" parent="ui"]
 layout_mode = 0
-offset_left = 1127.0
+offset_left = 1751.0
 offset_top = 45.0
-offset_right = 1243.0
+offset_right = 1867.0
 offset_bottom = 68.0
 theme_override_font_sizes/normal_font_size = 14
 bbcode_enabled = true
@@ -46,9 +64,9 @@ fit_content = true
 
 [node name="RichTextLabel3" type="RichTextLabel" parent="ui"]
 layout_mode = 0
-offset_left = 1127.0
+offset_left = 1751.0
 offset_top = 80.0
-offset_right = 1243.0
+offset_right = 1867.0
 offset_bottom = 103.0
 theme_override_font_sizes/normal_font_size = 14
 bbcode_enabled = true
@@ -57,9 +75,9 @@ fit_content = true
 
 [node name="repulsion_slider" type="HSlider" parent="ui"]
 layout_mode = 2
-offset_left = 1130.0
+offset_left = 1754.0
 offset_top = 25.0
-offset_right = 1280.0
+offset_right = 1904.0
 offset_bottom = 41.0
 grow_horizontal = 0
 grow_vertical = 2
@@ -69,9 +87,9 @@ rounded = true
 
 [node name="alignement_slider" type="HSlider" parent="ui"]
 layout_mode = 2
-offset_left = 1130.0
+offset_left = 1754.0
 offset_top = 63.0
-offset_right = 1280.0
+offset_right = 1904.0
 offset_bottom = 79.0
 grow_horizontal = 0
 grow_vertical = 2
@@ -81,9 +99,9 @@ rounded = true
 
 [node name="attraction_slider" type="HSlider" parent="ui"]
 layout_mode = 2
-offset_left = 1130.0
+offset_left = 1754.0
 offset_top = 100.0
-offset_right = 1280.0
+offset_right = 1904.0
 offset_bottom = 116.0
 grow_horizontal = 0
 grow_vertical = 2
@@ -93,9 +111,9 @@ rounded = true
 
 [node name="RichTextLabel4" type="RichTextLabel" parent="ui"]
 layout_mode = 0
-offset_left = 1127.0
+offset_left = 1751.0
 offset_top = 116.0
-offset_right = 1243.0
+offset_right = 1867.0
 offset_bottom = 139.0
 theme_override_font_sizes/normal_font_size = 14
 bbcode_enabled = true
@@ -104,15 +122,34 @@ fit_content = true
 
 [node name="speed_slider" type="HSlider" parent="ui"]
 layout_mode = 2
-offset_left = 1130.0
+offset_left = 1754.0
 offset_top = 136.0
-offset_right = 1280.0
+offset_right = 1904.0
 offset_bottom = 152.0
 grow_horizontal = 0
 grow_vertical = 2
 max_value = 400.0
 step = 5.0
-rounded = true
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 129
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(-3, 538.75)
+shape = SubResource("RectangleShape2D_k5fgh")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(1918.5, 540.75)
+shape = SubResource("RectangleShape2D_lm3i0")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(955.5, 3.5)
+shape = SubResource("RectangleShape2D_irh34")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(955.5, 1080)
+shape = SubResource("RectangleShape2D_wvjre")
 
 [connection signal="drag_ended" from="ui/repulsion_slider" to="." method="_on_repulsion_slider_drag_ended"]
 [connection signal="drag_ended" from="ui/alignement_slider" to="." method="_on_alignement_slider_drag_ended"]
